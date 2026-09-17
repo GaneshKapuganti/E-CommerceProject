@@ -17,24 +17,14 @@ def create_payment(payment: PaymentCreate,db: Session = Depends(get_db)):
         if existing_payment:
             raise HTTPException(status_code=400,detail="Transaction ID already exists")
 
-    new_payment = Payment(
-        order_id=payment.order_id,
-        amount=payment.amount,
-        payment_method=payment.payment_method,
-        status=payment.status,
-        transaction_id=payment.transaction_id
-    )
-
+    new_payment = Payment(order_id=payment.order_id,amount=payment.amount,payment_method=payment.payment_method,status=payment.status,transaction_id=payment.transaction_id)
     db.add(new_payment)
     db.commit()
     db.refresh(new_payment)
     return new_payment
 
 @router.get("",response_model=PaymentListResponse)
-def get_payments(
-    limit: int = Query(20, ge=1, le=100),
-    offset: int = Query(0, ge=0),
-    db: Session = Depends(get_db)):
+def get_payments(limit: int = Query(20, ge=1, le=100),offset: int = Query(0, ge=0),db: Session = Depends(get_db)):
     query = db.query(Payment)
     total = query.count()
     payments = (query.offset(offset).limit(limit).all())
@@ -42,9 +32,7 @@ def get_payments(
 
 @router.get("/{payment_id}",response_model=PaymentResponse)
 def get_payment(payment_id: int,db: Session = Depends(get_db)):
-
     payment = (db.query(Payment).filter(Payment.id == payment_id).first())
-
     if payment is None:
         raise HTTPException(status_code=404,detail="Payment not found")
     return payment
