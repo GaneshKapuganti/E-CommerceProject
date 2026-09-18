@@ -7,7 +7,7 @@ from models.product import Product
 from schemas.product import ProductCreate, ProductPatch
 
 
-def _ensure_category_exists(db: Session, category_id: int) -> None:
+def _ensure_category_exists(db: Session, category_id: int):
     if category_crud.get_by_id(db, category_id) is None:
         raise HTTPException(status_code=404, detail="Category not found")
 

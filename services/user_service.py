@@ -1,6 +1,5 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-
 from crud import user as user_crud
 from models.user import User
 from schemas.user import UserCreate, UserPatch
@@ -13,7 +12,7 @@ def create_user(db: Session, user: UserCreate) -> User:
     return user_crud.create(db, user.name, user.email, user.password_hash)
 
 
-def list_users(db: Session, limit: int, offset: int) -> dict:
+def list_users(db: Session, limit: int, offset: int):
     total, items = user_crud.get_multi(db, limit, offset)
     return {"total": total, "limit": limit, "offset": offset, "items": items}
 
@@ -42,6 +41,6 @@ def patch_user(db: Session, user_id: int, data: UserPatch) -> User:
     )
 
 
-def delete_user(db: Session, user_id: int) -> None:
+def delete_user(db: Session, user_id: int):
     user = get_user(db, user_id)
     user_crud.delete(db, user)

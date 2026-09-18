@@ -10,24 +10,16 @@ def create_order(db: Session, order: OrderCreate) -> Order:
     return order_crud.create(db, order.user_id, order.status, order.total_amount)
 
 
-def list_orders(
-    db: Session,
-    limit: int,
-    offset: int,
-    user_id: int | None,
-    status: str | None,
-) -> dict:
+def list_orders(db: Session,limit: int,offset: int,user_id: int,status: str):
     total, items = order_crud.get_multi(db, limit, offset, user_id, status)
     return {"total": total, "limit": limit, "offset": offset, "items": items}
 
-
-def get_order(db: Session, order_id: int) -> Order:
+def get_order(db: Session, order_id: int):
     order = order_crud.get_by_id(db, order_id)
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
     return order
 
-
-def update_order_status(db: Session, order_id: int, data: OrderStatusUpdate) -> Order:
+def update_order_status(db: Session, order_id: int, data: OrderStatusUpdate):
     order = get_order(db, order_id)
     return order_crud.update_status(db, order, data.status)
