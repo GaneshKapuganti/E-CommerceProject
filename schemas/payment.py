@@ -1,12 +1,14 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
+from models.enums import PaymentStatus
+
 
 class PaymentCreate(BaseModel):
     order_id: int
     amount: float
     payment_method: str
-    status: str = "pending"
+    status: PaymentStatus = PaymentStatus.pending
     transaction_id: str | None = None
 
 
@@ -15,7 +17,7 @@ class PaymentResponse(BaseModel):
     order_id: int
     amount: float
     payment_method: str
-    status: str
+    status: PaymentStatus
     transaction_id: str | None = None
     paid_at: datetime | None = None
     model_config = ConfigDict(from_attributes=True)

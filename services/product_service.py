@@ -21,24 +21,19 @@ def create_product(db: Session, product: ProductCreate) -> Product:
         product.name,
         product.description,
         product.price,
-        product.stock_quantity,
-    )
-
+        product.stock_quantity)
 
 def list_products(
     db: Session,
     limit: int,
     offset: int,
-    category_id: int | None,
-    search: str | None,
-    min_price: float | None,
-    max_price: float | None,
-) -> dict:
+    category_id: int,
+    search: str ,
+    min_price: float,
+    max_price: float,):
     total, items = product_crud.get_multi(
-        db, limit, offset, category_id, search, min_price, max_price
-    )
+        db, limit, offset, category_id, search, min_price, max_price)
     return {"total": total, "limit": limit, "offset": offset, "items": items}
-
 
 def get_product(db: Session, product_id: int) -> Product:
     product = product_crud.get_by_id(db, product_id)

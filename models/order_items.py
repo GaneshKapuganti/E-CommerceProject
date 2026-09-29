@@ -1,4 +1,5 @@
 from sqlalchemy import Column,BigInteger,Numeric,ForeignKey,CheckConstraint
+from sqlalchemy.orm import relationship
 from database import Base
 
 
@@ -9,6 +10,9 @@ class OrderItem(Base):
     product_id = Column(BigInteger,ForeignKey("products.id"),nullable=False,index=True)
     quantity = Column(BigInteger,nullable=False)
     unit_price = Column(Numeric(10, 2),nullable=False)
+
+    order = relationship("Order", back_populates="items")
+    product = relationship("Product", back_populates="order_items")
 
     __table_args__ = (
         CheckConstraint(
