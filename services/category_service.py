@@ -6,7 +6,7 @@ from schemas.category import CategoryCreate
 
 def create_category(db: Session, category: CategoryCreate):
     if category_crud.get_by_name(db, category.name):
-        raise HTTPException(status_code=400, detail="Category already exists")
+        raise HTTPException(status_code=409, detail="Category already exists")
     return category_crud.create(db, category.name, category.description)
 
 def list_categories(db: Session, limit: int, offset: int):

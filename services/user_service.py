@@ -7,7 +7,7 @@ from schemas.user import UserCreate, UserPatch
 
 def create_user(db: Session, user: UserCreate) -> User:
     if user_crud.get_by_email(db, user.email):
-        raise HTTPException(status_code=400, detail="Email already exists")
+        raise HTTPException(status_code=409, detail="Email already exists")
 
     return user_crud.create(db, user.name, user.email, user.password_hash)
 

@@ -11,7 +11,7 @@ def create_payment(db: Session, payment: PaymentCreate):
         raise HTTPException(status_code=404, detail="Order not found")
     if payment.transaction_id is not None:
         if payment_crud.get_by_transaction_id(db, payment.transaction_id):
-            raise HTTPException(status_code=400, detail="Transaction ID already exists")
+            raise HTTPException(status_code=409, detail="Transaction ID already exists")
     return payment_crud.create(
         db,
         payment.order_id,
