@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
+from sqlalchemy.orm import relationship
 from database import Base
 
 class User(Base):
@@ -8,3 +9,5 @@ class User(Base):
     email = Column(String(200), nullable=False,unique=True)
     password_hash = Column(String(255),nullable=False)
     created_at = Column(DateTime(timezone=True),nullable=False,server_default=func.now())
+
+    orders = relationship("Order", back_populates="user")

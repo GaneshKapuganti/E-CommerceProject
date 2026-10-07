@@ -1,16 +1,16 @@
-from fastapi import FastAPI
-from routers import categories, orders, users, products,payments, order_items
-from database import Base, engine
+from fastapi import Depends, FastAPI
+from auth import get_current_user
+from routers import auth, categories, orders, users, products,payments, order_items
 
 app = FastAPI()
-Base.metadata.create_all(bind=engine)
 
-app.include_router(categories.router)
+app.include_router(auth.router)
+app.include_router(categories.router, dependencies=[Depends(get_current_user)])
 app.include_router(users.router)
-app.include_router(orders.router)
-app.include_router(products.router)
-app.include_router(order_items.router)
-app.include_router(payments.router)
+app.include_router(orders.router, dependencies=[Depends(get_current_user)])
+app.include_router(products.router, dependencies=[Depends(get_current_user)])
+app.include_router(order_items.router, dependencies=[Depends(get_current_user)])
+app.include_router(payments.router, dependencies=[Depends(get_current_user)])
 
 
 

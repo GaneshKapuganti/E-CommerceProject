@@ -1,4 +1,5 @@
 from sqlalchemy import Column,BigInteger,String,Text,Numeric,ForeignKey,CheckConstraint
+from sqlalchemy.orm import relationship
 
 
 from database import Base
@@ -12,6 +13,9 @@ class Product(Base):
     description = Column(Text,nullable=True)
     price = Column(Numeric(10, 2),nullable=False)
     stock_quantity = Column(BigInteger,nullable=False)
+
+    category = relationship("Category", back_populates="products")
+    order_items = relationship("OrderItem", back_populates="product")
 
     __table_args__ = (
         CheckConstraint(
